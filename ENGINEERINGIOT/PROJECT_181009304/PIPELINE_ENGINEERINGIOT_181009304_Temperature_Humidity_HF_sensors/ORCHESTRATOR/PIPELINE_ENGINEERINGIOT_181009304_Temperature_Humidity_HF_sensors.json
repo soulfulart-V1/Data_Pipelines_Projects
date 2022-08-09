@@ -1,0 +1,81 @@
+{
+  "Comment": "PIPELINE_ENGINEERINGIOT_181009304_Temperature_Humidity_HF_sensors",
+  "StartAt": "EXTRACT",
+  "States": {
+    "EXTRACT": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:sa-east-1:708253334587:function:EXTRACT_ENGINEERINGIOT_181009304_GET-JSON-URL:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "JSON to CSV TRANSFORM"
+    },
+    "JSON to CSV TRANSFORM": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun",
+      "Parameters": {
+        "JobName": "ENGINEERINGIOT_181009304_Temperature_Humidity__HF_sensors"
+      },
+      "Next": "Create Pipe Variables"
+    },
+    "Create Pipe Variables": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:sa-east-1:708253334587:function:AUX_ENGINEERINGIOT_181009304_GENERATE-VARIABLES:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "CSV to SQL Table TEMP_HUM_HF_SENSORS"
+    },
+    "CSV to SQL Table TEMP_HUM_HF_SENSORS": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:sa-east-1:708253334587:function:GENERALPP_CSV_TO_SQLTABLE:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "End": true
+    }
+  },
+  "TimeoutSeconds": 360
+}
