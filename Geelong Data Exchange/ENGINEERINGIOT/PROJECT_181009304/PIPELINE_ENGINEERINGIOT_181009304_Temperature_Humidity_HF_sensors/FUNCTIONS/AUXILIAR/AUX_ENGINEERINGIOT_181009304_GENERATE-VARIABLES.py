@@ -45,6 +45,7 @@ def lambda_handler(event, context):
     pipeline_parameters = {
         "BUCKET_NAME": bucket_name,
         "input_file_path": input_file_path,
+        
         "PARTITION_VALUE": PARTITION_VALUE,
         "PORT": "3306",
         "REGION": "sa-east-1",
