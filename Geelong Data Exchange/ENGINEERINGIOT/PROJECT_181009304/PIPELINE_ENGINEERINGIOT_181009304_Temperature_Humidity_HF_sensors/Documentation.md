@@ -28,15 +28,23 @@ The third task creates variables that will be used by the next task. It finds th
 The fourth task get the csv file sent by the previous task and write it to a sql table.
 
  Resources:
+
     + TRIGGER: arn:aws:events:sa-east-1:708253334587:rule/TRIGGER_EXTRACT_ENGINEERINGIOT_181009304_GET-JSON-URL
+
     + VPC: 
+
         -Endpoints:
+
             -vpce-0c1bca9b6087e51c9: allow secret accesss
+
         -Route tables:
+
             -rtb-06e21756795843c03: allow S3 access from lambda function on task three
 
 Monthly cost:
+
     + RDS instance: 30 USD
+    
     + GLUE JOBS: 2 USD
 
 </div>
