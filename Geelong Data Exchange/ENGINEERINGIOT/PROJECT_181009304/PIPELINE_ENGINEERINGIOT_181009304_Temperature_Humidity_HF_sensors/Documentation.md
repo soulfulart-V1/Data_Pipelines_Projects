@@ -8,9 +8,9 @@ This pipeline has a goal of extracting and url request and store its data to a S
 
 It will store json response from the API https://www.geelongdataexchange.com.au/explore/dataset/rising-hf/api/?sort=metadata_time to our data lake in structured format.
 
-The full pipeline is shown in the figure 
+The full pipeline is shown in the figure  
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/soulfulart-V1/Data_Pipelines_Projects/blob/main/Geelong Data Exchange/ENGINEERINGIOT/PROJECT_181009304/RESOURCES/IMAGES/PIPELINE_ENGINEERINGIOT_181009304_Temperature_Humidity_HF_sensorsInfo.png?raw=true)
 
 The first task EXTRACT is a LAMDBA located at /FUNCTIONS/EXTRACT/EXTRACT_ENGINEERINGIOT_181009304_GET-JSON-URL.py that gets an URL response and store it on our data lake which is a S3 bucket on the path 'RAW/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/TEMPERATURE_AND_HUMIDITY_181009304/DATA/PARTITIONDAY'
 
