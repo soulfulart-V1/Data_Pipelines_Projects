@@ -35,16 +35,16 @@ The fourth task get the csv file sent by the previous task and write it to a sql
 
         -Endpoints:
 
-            -vpce-0c1bca9b6087e51c9: allow secret accesss
+            -vpce-0c1bca9b6087e51c9: allow secret accesss from lambda function on task "JSON to SQL Table TEMP_HUM_HF_SENSORS"
 
         -Route tables:
 
-            -rtb-06e21756795843c03: allow S3 access from lambda function on task three
+            -rtb-06e21756795843c03: allow S3 access from lambda function on task "JSON to SQL Table TEMP_HUM_HF_SENSORS"
 
 Monthly cost:
 
     + RDS instance: 30 USD
-    
+
     + GLUE JOBS: 2 USD
 
 </div>
