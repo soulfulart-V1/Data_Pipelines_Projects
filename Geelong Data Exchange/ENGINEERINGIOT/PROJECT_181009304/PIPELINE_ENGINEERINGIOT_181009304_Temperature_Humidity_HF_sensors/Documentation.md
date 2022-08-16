@@ -4,6 +4,8 @@ First INPUT: URL request
 Last OUTPUT: SQL table
 PARITION: anomedia
 
+<div style="text-align: justify">
+
 This pipeline has a goal of extracting and url request and store its data to a SQL database (warehouse)
 
 It will store json response from the API https://www.geelongdataexchange.com.au/explore/dataset/rising-hf/api/?sort=metadata_time to our data lake in structured format.
@@ -17,3 +19,5 @@ The first task EXTRACT is a LAMDBA located at /FUNCTIONS/EXTRACT/EXTRACT_ENGINEE
 The second task is a GLUE job that filter the json file stored by the previous task. This job takes only the necessary data from the json file and stores it as CSV file on the path 'CURATED/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/TEMPERATURE_AND_HUMIDITY_181009304/DATA/PARTITIONDAY'
 
 The third task
+
+</div>
