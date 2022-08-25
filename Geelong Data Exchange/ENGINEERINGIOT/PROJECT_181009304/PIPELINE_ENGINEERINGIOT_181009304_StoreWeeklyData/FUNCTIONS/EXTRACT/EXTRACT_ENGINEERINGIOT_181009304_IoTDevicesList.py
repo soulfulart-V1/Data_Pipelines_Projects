@@ -5,7 +5,7 @@ import datetime
 import requests
 
 #global objects
-s3 = boto3.client('s3') #define s3 service
+s3 = boto3.client('s3')
 
 #global variables
 today_date_minus_one = datetime.date.today() - datetime.timedelta(days=1)
@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     
     parameters = {
         
-        'dataset' : 'rising-hf',
+        'dataset' : 'devices',
         'refine.metadata_time' : used_year+'/'+used_month+'/'+used_day,
         'rows' : '2500'
         
@@ -47,7 +47,7 @@ def lambda_handler(event, context):
     request_data = requests.get(url_request)
     data_txt = request_data.text
     
-    object_path = 'RAW/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/TEMPERATURE_AND_HUMIDITY_181009304/DATA/'
+    object_path = 'RAW/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/IOT_DEVICES/DATA/'
     objetct_key = object_path+used_year+used_month+used_day+'.json'
     
     s3.put_object(Body=data_txt, Bucket='soulfulart-data-lake', Key=objetct_key)
