@@ -7,25 +7,30 @@ import requests
 #global objects
 s3 = boto3.client('s3') #define s3 service
 
-#global variables
-today_date_minus_one = datetime.date.today() - datetime.timedelta(days=1)
-
-#get year month and day separated
-used_year = str(today_date_minus_one.year)
-
-#avoid use numbers without left zero 
-if (today_date_minus_one.month < 10):
-    used_month = '0'+str(today_date_minus_one.month)
-    
-else: str(today_date_minus_one.month)
-
-if (today_date_minus_one.day<10):
-    used_day = '0'+str(today_date_minus_one.day)
-else: used_day = str(today_date_minus_one.day)
-
-
 def lambda_handler(event, context):
+    
+    year = int(event['time'][0:4])
+    month = int(event['time'][5:7])
+    day = int(event['time'][8:10])
 
+    date_to_extract =  datetime.datetime(year, month, day)
+    
+    #date to extract
+    today_date_minus_one = date_to_extract - datetime.timedelta(days=1)
+    
+    #get year month and day separated
+    used_year = str(today_date_minus_one.year)
+    
+    #avoid use numbers without left zero 
+    if (today_date_minus_one.month < 10):
+        used_month = '0'+str(today_date_minus_one.month)
+        
+    else: used_month = str(today_date_minus_one.month)
+    
+    if (today_date_minus_one.day<10):
+        used_day = '0'+str(today_date_minus_one.day)
+    else: used_day = str(today_date_minus_one.day)
+    
     base_url = 'https://www.geelongdataexchange.com.au/api/records/1.0/search/?'
     
     parameters = {
@@ -54,6 +59,7 @@ def lambda_handler(event, context):
     
     return {
         
-        'message' : 'Request: refine.metadata_time='+str(today_date_minus_one)+' stored at '+objetct_key
+        'message' : 'Request: refine.metadata_time='+str(today_date_minus_one)+' stored at '+objetct_key,
+        'time' : str(date_to_extract)
         
     }

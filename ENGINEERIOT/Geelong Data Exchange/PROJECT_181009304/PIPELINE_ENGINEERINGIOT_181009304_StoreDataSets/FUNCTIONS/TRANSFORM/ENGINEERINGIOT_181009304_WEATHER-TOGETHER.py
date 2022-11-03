@@ -37,7 +37,7 @@ else: used_day = str(today_date_minus_one.day)
 bucket_name = 'soulfulart-data-lake'
 PARTITION = used_year+used_month+used_day
 today_file = used_year+used_month+used_day+'.json'
-input_root_path = 's3://'+bucket_name+'/RAW/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/TEMPERATURE_AND_HUMIDITY_181009304/DATA/'
+input_root_path = 's3://'+bucket_name+'/RAW/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/WEATHER_TOGETHER/DATA/'
 input_file_path =  input_root_path + today_file
 output_file_path = input_file_path.replace('RAW', 'CURATED')
 output_file_path = output_file_path.replace('.json', '')
@@ -60,14 +60,14 @@ df_fields = df_col.select('fields.*', 'geometry.*', 'record_timestamp', 'recordi
 
 df_col.unpersist()
 
-df_fields_location = df_fields.withColumn('location_lat', df_fields.location[0] )
-df_fields_location = df_fields_location.withColumn('location_long', df_fields.location[1] )
+df_fields_location = df_fields.withColumn('location_lat', df_fields.device_location[0] )
+df_fields_location = df_fields_location.withColumn('location_long', df_fields.device_location[1] )
 
 df_col.unpersist()
 
 #split name into city and stret
-df_fields_final = df_fields_location.withColumn('street', F.split(df_fields.name, ", ")[0] )
-df_fields_final = df_fields_final.withColumn('city', F.split(df_fields.name, ", ")[1] )
+df_fields_final = df_fields_location.withColumn('device_street', F.split(df_fields.device_name, ", ")[0] )
+df_fields_final = df_fields_final.withColumn('device_city', F.split(df_fields.device_name, ", ")[1] )
 
 df_fields_location.unpersist()
 
@@ -88,12 +88,12 @@ df_fields_final.write.option("header", "true").mode("overwrite").parquet(output_
 #WRITE TO ATHENA TABLE
 
 client_athena = boto3.client('athena')
-SQL_QUERY = """ALTER TABLE TEMP_HUM_HF_SENSORS ADD IF NOT EXISTS PARTITION (YEARMONTHDAY="""+PARTITION+""") LOCATION 's3://soulfulart-data-lake/CURATED/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/TEMPERATURE_AND_HUMIDITY_181009304/DATA/"""+PARTITION+"""/'"""
+SQL_QUERY = """ALTER TABLE TEMP_HUM_WEATHER_TOGETHER ADD IF NOT EXISTS PARTITION (YEARMONTHDAY="""+PARTITION+""") LOCATION 's3://soulfulart-data-lake/CURATED/ENGINEERINGIOT/GEELONGDATAEXCHANGE_181009304/WEATHER_TOGETHER/DATA/"""+PARTITION+"""/'"""
 
 queryStart = client_athena.start_query_execution(
     QueryString = SQL_QUERY,
     QueryExecutionContext = {
         'Database': 'geelongdataexchange'
     },
-    ResultConfiguration = { 'OutputLocation': 's3://aws-glue-scripts-708253334587-sa-east-1/ATHENA_QUERY/'}
+    ResultConfiguration = { 'OutputLocation': 's3://aws-glue-scripts-708253334587-sa-east-1/ATHENA_QUERY/WEATHER_TOGETHER'}
     )

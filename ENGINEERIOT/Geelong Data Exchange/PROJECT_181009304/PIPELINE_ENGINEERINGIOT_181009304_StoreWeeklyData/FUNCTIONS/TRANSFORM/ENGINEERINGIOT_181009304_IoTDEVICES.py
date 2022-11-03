@@ -15,7 +15,7 @@ used_year = str(today_date_minus_one.year)
 if (today_date_minus_one.month < 10):
     used_month = '0'+str(today_date_minus_one.month)
     
-else: str(today_date_minus_one.month)
+else: used_month = str(today_date_minus_one.month)
 
 if (today_date_minus_one.day<10):
     used_day = '0'+str(today_date_minus_one.day)
