@@ -4,9 +4,11 @@ import boto3
 import requests
 import datetime
 
+from io import StringIO
 from pandas import DataFrame
 
 #global itens
+s3 = boto3.client('s3')
 bucket_name = 'soulfulart-data-lake'
 
 def lambda_handler(event, context):
@@ -35,13 +37,17 @@ def lambda_handler(event, context):
 
     final_dataframe = DataFrame.from_records(messages_physical_data)
 
-    object_path = 's3://'+bucket_name+'/ENGINEERINGIOT/IOT_GET_DATA_210904307/STREAM_DATA/PHYSICAL_VALUES'
+    object_key = 'STREAM/ENGINEERINGIOT/IOT_GET_DATA_210904307/REGION_A/PHYSICAL_VALUES'
     file_name = str(datetime.datetime.now())
-    object_path = object_path + file_name +'.parquet.gzip'
-    final_dataframe.to_parquet(object_path, compression='gzip')
+    object_key = object_key + file_name +'.csv'
+    
+    csv_buffer = StringIO()
+    final_dataframe.to_csv(csv_buffer)
+    
+    s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=object_key, ContentType='text/csv')
     
     return {
 
-        'message' : 'File'+object_path+' write succesfully!'
+        'message' : 'File '+object_key+' write succesfully!'
         
     }
