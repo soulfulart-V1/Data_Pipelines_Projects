@@ -44,10 +44,15 @@ def lambda_handler(event, context):
     csv_buffer = StringIO()
     final_dataframe.to_csv(csv_buffer)
     
-    s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=object_key, ContentType='text/csv')
+    if not final_dataframe.empty:
+        s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=object_key, ContentType='text/csv')
+        log_message = 'File '+object_key+' write succesfully!'
+    
+    else:        
+        log_message = 'No new messages!'
     
     return {
 
-        'message' : 'File '+object_key+' write succesfully!'
+        'message' : log_message
         
     }
