@@ -1,4 +1,3 @@
-import boto3
 import datetime
 
 from pyspark.sql import SparkSession

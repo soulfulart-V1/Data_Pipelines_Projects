@@ -13,6 +13,11 @@ bucket_name = 'soulfulart-data-lake'
 
 def lambda_handler(event, context):
 
+    year = event['time'][0:4]
+    month = event['time'][5:7]
+    day = event['time'][8:10]
+    partition_name = 'yearmonthday'
+
     headers = {
         'Kafka-Auto-Offset-Reset': 'earliest'   
     }
@@ -37,7 +42,8 @@ def lambda_handler(event, context):
 
     final_dataframe = DataFrame.from_records(messages_physical_data)
 
-    object_key = 'STREAM/ENGINEERINGIOT/IOT_GET_DATA_210904307/REGION_A/PHYSICAL_VALUES'
+    object_key = 'STREAM/ENGINEERINGIOT/IOT_GET_DATA_210904307/REGION_A/PHYSICAL_VALUES/'
+    object_key = object_key+partition_name+'='+year+month+day+'/'
     file_name = str(datetime.datetime.now())
     object_key = object_key + file_name +'.csv'
     
