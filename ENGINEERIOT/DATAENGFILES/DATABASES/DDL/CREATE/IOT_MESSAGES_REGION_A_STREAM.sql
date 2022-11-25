@@ -1,6 +1,5 @@
 CREATE EXTERNAL TABLE IF NOT EXISTS ENGIOT.IOT_MESSAGES_REGION_A_STREAM (
 
-    df_index string,
     device_id STRING,
     device_class STRING,
     heart_pulse STRING,

@@ -41,6 +41,12 @@ def lambda_handler(event, context):
         messages_physical_data.append(message_values[device_data_field])
 
     final_dataframe = DataFrame.from_records(messages_physical_data)
+    
+    try:
+        final_dataframe = final_dataframe.drop(final_dataframe.columns[0])
+        
+    except:
+        pass
 
     object_key = 'STREAM/ENGINEERINGIOT/IOT_GET_DATA_210904307/REGION_A/PHYSICAL_VALUES/'
     object_key = object_key+partition_name+'='+year+month+day+'/'
@@ -48,7 +54,7 @@ def lambda_handler(event, context):
     object_key = object_key + file_name +'.csv'
     
     csv_buffer = StringIO()
-    final_dataframe.to_csv(csv_buffer)
+    final_dataframe.to_csv(csv_buffer, index=False)
     
     if not final_dataframe.empty:
         s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=object_key, ContentType='text/csv')
