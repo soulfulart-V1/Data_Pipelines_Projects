@@ -10,7 +10,9 @@ CREATE EXTERNAL TABLE IF NOT EXISTS ENGIOT.IOT_MESSAGES_REGION_A_STREAM (
     humidity STRING,
     pressure_air STRING,
     recorded_time_device STRING,
-    stream_time STRING
+    stream_time STRING,
+    sound_intensity STRING,
+    other_data STRING
     
     )
 
