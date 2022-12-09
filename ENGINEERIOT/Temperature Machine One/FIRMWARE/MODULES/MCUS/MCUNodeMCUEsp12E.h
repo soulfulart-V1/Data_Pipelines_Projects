@@ -14,8 +14,6 @@ public:
     string pass_value;
     } kafka_parameters;
 
-    int pinout_map[30];
-
     //psysical_data
     string device_id;
     string device_class;
@@ -29,7 +27,10 @@ public:
     string recorded_time_device;
     string stream_time;
     string sound_intensity;
-
+    
+    //json_message
+    string physical_data_json;
+    
     //Public methods
     string getPhysicalDataJson();
     void sendKafkaPhysicalData();
@@ -39,7 +40,6 @@ public:
 private:
 
     void updatePhysicalData();
-    void payloadGenerator();
-    void getPinoutMap();
+    void updatePhysicalDataJson();
 
 #endif
