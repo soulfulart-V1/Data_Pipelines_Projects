@@ -1,9 +1,9 @@
 {
-    "url": "https://bright-piranha-5383-us1-rest-kafka.upstash.io/produce/iot_sensors_real_time/MESSAGE",
-    "raw_url": "https://bright-piranha-5383-us1-rest-kafka.upstash.io/produce/iot_sensors_real_time/MESSAGE",
+    "url": "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE",
+    "raw_url": "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE",
     "method": "get",
     "auth": {
-        "user": "USEGITIGNORE",
-        "password": "USEGITIGNORE"
+        "user": "USER_NAME",
+        "password": "PASS_VALUE"
     }
 }

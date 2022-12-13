@@ -12,6 +12,7 @@ public:
     srting boostrap_server;
     string user_name;
     string pass_value;
+    string topic;
     } kafka_parameters;
 
     //psysical_data

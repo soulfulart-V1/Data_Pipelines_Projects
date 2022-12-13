@@ -28,12 +28,13 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[3]){
     this->kafka_parameters.boostrap_server = kafka_parameters[0];
     this->kafka_parameters.user_name = kafka_parameters[1];
     this->kafka_parameters.pass_value = kafka_parameters[2];
+    this->kafka_parameters.topic = kafka_parameters[3];
 
     HTTPClient http;
 
     string url_request="";
 
-    ifstream url_request_file("payloadModel.json");
+    ifstream url_request_file("urlKafkaProducer.txt");
 
     while (getline (url_request_file, current_line)) {
 
@@ -41,6 +42,12 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[3]){
 
     }
 
+    url_request.replace(url_request.find("BOOTSRAP_SERVER"), sizeof("BOOTSRAP_SERVER")-1, this->kafka_parameters.boostrap_server);
+    url_request.replace(url_request.find("KAFKA_TOPIC"), sizeof("KAFKA_TOPIC")-1, this->kafka_parameters.topic);
+    url_request.replace(url_request.find("USER_NAME"), sizeof("USER_NAME")-1, this->kafka_parameters.user_name);
+    url_request.replace(url_request.find("PASS_VALUE"), sizeof("PASS_VALUE")-1, this->kafka_parameters.pass_value);
+
+    //get stream time
     this->recorded_time_device = time(0);
 
     this->physical_data_json.replace(this->physical_data_json.find("<stream_time>"), sizeof("<stream_time>")-1, this->stream_time);
