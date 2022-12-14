@@ -1,4 +1,3 @@
-#include "DHT.h"
 #include "DHT11Module.h"
 
 DHT11Module::DHT11Module(const int dhtPin){
@@ -10,7 +9,7 @@ DHT11Module::DHT11Module(const int dhtPin){
 
 DHT11ToKafka::getPhysicalData(){
 
-    this->DHT.read11(this->dhtPin);
+    this->dht.read11(this->dhtPin);
     this->temperature = this->DHT.temperature;
     this->humidity = this->DHT.humidity;
 

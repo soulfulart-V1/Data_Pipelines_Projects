@@ -1,12 +1,4 @@
-#include <ctime>
-#include <WiFi.h>
-#include <fstream>
-#include <iostream>
-#include "Arduino.h"
-#include "DHT11Module.h"
-#include <ESP8266HTTPClient.h>
-
-using namespace std;
+#include "MCUNodeMCUEsp12E.h"
 
 //Hardware defined variables check schematics
 #define DHT11PIN 16
@@ -23,7 +15,10 @@ MCUNodeMCUEsp12E::MCUNodeMCUEsp12E(){
     
 }
 
-MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[3]){
+MCUNodeMCUEsp12E::sendKafkaPhysicalData(String kafka_parameters[4]){
+    
+    this->updatePhysicalData();
+    this->updatePhysicalDataJson();
 
     this->kafka_parameters.boostrap_server = kafka_parameters[0];
     this->kafka_parameters.user_name = kafka_parameters[1];
@@ -32,7 +27,7 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[3]){
 
     HTTPClient http;
 
-    string url_request="";
+    String url_request="";
 
     ifstream url_request_file("urlKafkaProducer.txt");
 
@@ -58,9 +53,11 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[3]){
 
 }
 
+//Private methods
+
 MCUNodeMCUEsp12E::updatePhysicalDataJson(){
     
-    string payload_json="";
+    String payload_json="";
 
     ifstream payload_file("payloadModel.json");
 
@@ -83,14 +80,16 @@ MCUNodeMCUEsp12E::updatePhysicalDataJson(){
     
 }
 
-//Private methods
-
 MCUNodeMCUEsp12E::updatePhysicalData(){
 
     this->recorded_time_device = time(0);
-    this->DHT.read11(DHT11PIN);
-    this->humidity = this->DHT.humidity;
-    this->temperature = this->DHT.temperature;
+
+    DHT11Module dht_local(DHT11PIN);
+    dht_local.read11(DHT11PIN);
+    this->humidity = dht_local.humidity;
+    this->temperature = dht_local.temperature;
+
+    //read sound intensity data
     this->sound_intensity = analogRead(SOUNDSENSOR_IN);
 
 }

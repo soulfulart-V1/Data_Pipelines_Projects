@@ -3,15 +3,15 @@
 
 //Objects
 WiFiClient client;
-mcu_instance MCUNodeMCUEsp12E();
+MCUNodeMCUEsp12E mcu_instance;
 
 //kafka credentials
-string kafka_parameters_local[3];
-
-kafka_parameters_local[0] = "INSERT_BOOTSTRAPSERVER_DURING_COMPILE_PHASE";
-kafka_parameters_local[1] = "INSERT_USER_DURING_COMPILE_PHASE";
-kafka_parameters_local[2] = "INSERT_PASS_DURING_COMPILE_PHASE";
-kafka_parameters_local[3] = "INSERT_KAFKA_TOPIC_DURING_COMPILE_PHASE";
+String kafka_parameters_local[4]={
+  "INSERT_BOOTSTRAPSERVER_DURING_COMPILE_PHASE",
+  "INSERT_USER_DURING_COMPILE_PHASE",
+  "INSERT_PASS_DURING_COMPILE_PHASE",
+  "INSERT_KAFKA_TOPIC_DURING_COMPILE_PHASE"
+  };
 
 //wifi credentials
 const char *ssid =  "INSERT_WIFI_SSID";
