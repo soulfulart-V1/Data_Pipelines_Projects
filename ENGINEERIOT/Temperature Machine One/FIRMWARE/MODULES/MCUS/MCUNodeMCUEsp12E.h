@@ -14,6 +14,7 @@ using namespace std;
 
 //Hardware defined variables check schematics
 #define DHT11PIN 16
+#define DHTTYPE DHT11
 #define SOUNDSENSOR_IN A0
 
 class MCUNodeMCUEsp12E{

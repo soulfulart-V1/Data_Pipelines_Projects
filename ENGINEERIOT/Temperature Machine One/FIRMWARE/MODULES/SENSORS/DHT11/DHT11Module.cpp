@@ -1,16 +1,18 @@
 #include "DHT11Module.h"
 
-DHT11Module::DHT11Module(const int dhtPin){
+DHT11Module::DHT11Module(const int dht_pin, const int dht_type){
 
-    this->dhtPin = dhtPin;
+    this->dht_pin = dht_pin;
+    this->dht_pin = dht_type;
     this->getPhysicalData();
 
 }
 
-DHT11Module::getPhysicalData(){
+void DHT11Module::getPhysicalData(){
 
-    this->dht.read11(this->dhtPin);
-    this->temperature = this->DHT.temperature;
-    this->humidity = this->DHT.humidity;
+    DHT dht_instance(this->dht_pin, this->dht_type);
+    this->temperature = dht_instance.readTemperature();
+    this->humidity = dht_instance.readHumidity();
 
 }
+

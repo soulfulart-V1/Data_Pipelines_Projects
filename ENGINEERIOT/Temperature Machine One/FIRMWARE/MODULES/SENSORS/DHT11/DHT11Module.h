@@ -4,18 +4,20 @@
 #include "DHT.h"
 #include <string>
 
+using namespace std;
+
 class DHT11Module{
 
 public:
 
     //Defining common variables of the class
-    DHT dht;
     string humidity;
-    const int dhtPin;
     string temperature;
+    int dht_pin;
+    int dht_type;
 
     //Public methods
-    DHT11Module(const int dhtPin);
+    DHT11Module(int dht_pin, int dh_type);
     void getPhysicalData();
 
 };

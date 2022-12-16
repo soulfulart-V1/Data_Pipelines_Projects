@@ -82,7 +82,7 @@ void MCUNodeMCUEsp12E::updatePhysicalData(){
 
     this->recorded_time_device = time(0);
 
-    DHT11Module dht_local(DHT11PIN);
+    DHT11Module dht_local(DHT11PIN, DHTTYPE);
     this->humidity = dht_local.humidity;
     this->temp = dht_local.temperature;
 
