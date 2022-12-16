@@ -33,7 +33,7 @@ void MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[4]){
         url_request = url_request + current_line + "\n";
 
     }
-/*
+
     url_request.replace(url_request.find("BOOTSRAP_SERVER"), sizeof("BOOTSRAP_SERVER")-1, this->kafka_parameters.boostrap_server);
     url_request.replace(url_request.find("KAFKA_TOPIC"), sizeof("KAFKA_TOPIC")-1, this->kafka_parameters.topic);
     url_request.replace(url_request.find("USER_NAME"), sizeof("USER_NAME")-1, this->kafka_parameters.user_name);
@@ -46,8 +46,8 @@ void MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[4]){
 
     url_request.replace(url_request.find("MESSAGE"), sizeof("MESSAGE")-1, this->physical_data_json);
 
-    http.post(url_request);
-*/
+    int http_code = http.POST(url_request);
+
 }
 
 //Private methods
@@ -64,7 +64,7 @@ void MCUNodeMCUEsp12E::updatePhysicalDataJson(){
         payload_json = payload_json + current_line + "\n";
 
     }
-/*
+
     payload_json.replace(payload_json.find("<device_id>"), sizeof("<device_id>")-1, this->device_id);
     payload_json.replace(payload_json.find("<device_class>"), sizeof("<device_class>")-1, this->device_class);
     payload_json.replace(payload_json.find("<temp>"), sizeof("<temp>")-1, this->temp);
@@ -72,7 +72,7 @@ void MCUNodeMCUEsp12E::updatePhysicalDataJson(){
     payload_json.replace(payload_json.find("<recorded_time_device>"), sizeof("<recorded_time_device>")-1, this->recorded_time_device);
     payload_json.replace(payload_json.find("<sound_intensity>"), sizeof("<sound_intensity>")-1, this->sound_intensity);
 
-    payload_file.close();*/
+    payload_file.close();
 
     this->physical_data_json = payload_json;
     
