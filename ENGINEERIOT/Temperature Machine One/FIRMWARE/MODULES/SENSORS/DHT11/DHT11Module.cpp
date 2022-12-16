@@ -1,6 +1,6 @@
 #include "DHT11Module.h"
 
-DHT11Module::DHT11Module(const int dht_pin, const int dht_type){
+DHT11Module::DHT11Module(int dht_pin, int dht_type){
 
     this->dht_pin = dht_pin;
     this->dht_pin = dht_type;
