@@ -7,7 +7,7 @@ DHT11Module::DHT11Module(const int dhtPin){
 
 }
 
-DHT11ToKafka::getPhysicalData(){
+DHT11Module::getPhysicalData(){
 
     this->dht.read11(this->dhtPin);
     this->temperature = this->DHT.temperature;

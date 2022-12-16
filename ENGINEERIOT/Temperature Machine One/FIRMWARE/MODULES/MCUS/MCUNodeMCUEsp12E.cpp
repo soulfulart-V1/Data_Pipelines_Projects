@@ -1,21 +1,18 @@
 #include "MCUNodeMCUEsp12E.h"
 
-//Hardware defined variables check schematics
-#define DHT11PIN 16
-#define SOUNDSENSOR_IN A0
-
 //Public methods
 
 MCUNodeMCUEsp12E::MCUNodeMCUEsp12E(){
 
-    this->device_id = WiFi.macAddress();
     this->device_class = "sensors";
     this->updatePhysicalData();
     this->updatePhysicalDataJson();
     
 }
 
-MCUNodeMCUEsp12E::sendKafkaPhysicalData(String kafka_parameters[4]){
+void MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[4]){
+
+    string current_line="";
     
     this->updatePhysicalData();
     this->updatePhysicalDataJson();
@@ -27,16 +24,16 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(String kafka_parameters[4]){
 
     HTTPClient http;
 
-    String url_request="";
+    string url_request="";
 
     ifstream url_request_file("urlKafkaProducer.txt");
 
-    while (getline (url_request_file, current_line)) {
+    while (getline(url_request_file, current_line)) {
 
         url_request = url_request + current_line + "\n";
 
     }
-
+/*
     url_request.replace(url_request.find("BOOTSRAP_SERVER"), sizeof("BOOTSRAP_SERVER")-1, this->kafka_parameters.boostrap_server);
     url_request.replace(url_request.find("KAFKA_TOPIC"), sizeof("KAFKA_TOPIC")-1, this->kafka_parameters.topic);
     url_request.replace(url_request.find("USER_NAME"), sizeof("USER_NAME")-1, this->kafka_parameters.user_name);
@@ -50,14 +47,15 @@ MCUNodeMCUEsp12E::sendKafkaPhysicalData(String kafka_parameters[4]){
     url_request.replace(url_request.find("MESSAGE"), sizeof("MESSAGE")-1, this->physical_data_json);
 
     http.post(url_request);
-
+*/
 }
 
 //Private methods
 
-MCUNodeMCUEsp12E::updatePhysicalDataJson(){
+void MCUNodeMCUEsp12E::updatePhysicalDataJson(){
     
-    String payload_json="";
+    string payload_json="";
+    string current_line="";
 
     ifstream payload_file("payloadModel.json");
 
@@ -66,7 +64,7 @@ MCUNodeMCUEsp12E::updatePhysicalDataJson(){
         payload_json = payload_json + current_line + "\n";
 
     }
-
+/*
     payload_json.replace(payload_json.find("<device_id>"), sizeof("<device_id>")-1, this->device_id);
     payload_json.replace(payload_json.find("<device_class>"), sizeof("<device_class>")-1, this->device_class);
     payload_json.replace(payload_json.find("<temp>"), sizeof("<temp>")-1, this->temp);
@@ -74,20 +72,19 @@ MCUNodeMCUEsp12E::updatePhysicalDataJson(){
     payload_json.replace(payload_json.find("<recorded_time_device>"), sizeof("<recorded_time_device>")-1, this->recorded_time_device);
     payload_json.replace(payload_json.find("<sound_intensity>"), sizeof("<sound_intensity>")-1, this->sound_intensity);
 
-    payload_file.close();
+    payload_file.close();*/
 
     this->physical_data_json = payload_json;
     
 }
 
-MCUNodeMCUEsp12E::updatePhysicalData(){
+void MCUNodeMCUEsp12E::updatePhysicalData(){
 
     this->recorded_time_device = time(0);
 
     DHT11Module dht_local(DHT11PIN);
-    dht_local.read11(DHT11PIN);
     this->humidity = dht_local.humidity;
-    this->temperature = dht_local.temperature;
+    this->temp = dht_local.temperature;
 
     //read sound intensity data
     this->sound_intensity = analogRead(SOUNDSENSOR_IN);

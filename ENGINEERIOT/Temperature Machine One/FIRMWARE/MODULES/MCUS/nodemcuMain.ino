@@ -1,3 +1,4 @@
+#include <string>
 #include <ESP8266WiFi.h>
 #include <MCUNodeMCUEsp12E.h>
 
@@ -6,7 +7,7 @@ WiFiClient client;
 MCUNodeMCUEsp12E mcu_instance;
 
 //kafka credentials
-String kafka_parameters_local[4]={
+string kafka_parameters_local[4]={
   "INSERT_BOOTSTRAPSERVER_DURING_COMPILE_PHASE",
   "INSERT_USER_DURING_COMPILE_PHASE",
   "INSERT_PASS_DURING_COMPILE_PHASE",
@@ -14,8 +15,8 @@ String kafka_parameters_local[4]={
   };
 
 //wifi credentials
-const char *ssid =  "INSERT_WIFI_SSID";
-const char *pass =  "INSERT_WIFI_PASS";
+const char* ssid =  "INSERT_WIFI_SSID";
+const char* pass =  "INSERT_WIFI_PASS";
  
 void setup() 
 {
@@ -31,8 +32,7 @@ void setup()
       Serial.println("WiFi connected"); 
 }
  
-
-void loop (){
+void loop(){
 
     mcu_instance.sendKafkaPhysicalData(kafka_parameters_local);
 
