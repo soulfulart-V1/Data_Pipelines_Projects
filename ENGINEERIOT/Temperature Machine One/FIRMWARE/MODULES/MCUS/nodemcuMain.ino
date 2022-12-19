@@ -1,6 +1,7 @@
 #include <string>
 #include <ESP8266WiFi.h>
 #include <MCUNodeMCUEsp12E.h>
+#include <ESP8266HTTPClient.h>
 
 //Objects
 WiFiClient client;
@@ -17,7 +18,8 @@ string kafka_parameters_local[4]={
 //wifi credentials
 const char* ssid =  "INSERT_WIFI_SSID";
 const char* pass =  "INSERT_WIFI_PASS";
- 
+const char* server = "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE";
+
 void setup() 
 {
 
@@ -33,8 +35,10 @@ void setup()
 }
  
 void loop(){
-
-    mcu_instance.sendKafkaPhysicalData(kafka_parameters_local);
+  
+  HTTPClient http;
+  
+  string url_request = mcu_instance.urlKafkaDataProducer(kafka_parameters_local);
 
     //try to reconnect if connection goes down
     while (WiFi.status() != WL_CONNECTED) 
@@ -42,5 +46,7 @@ void loop(){
             delay(500);
             Serial.print(".");
           }
+          
+  http.begin(client,server);
 
 }

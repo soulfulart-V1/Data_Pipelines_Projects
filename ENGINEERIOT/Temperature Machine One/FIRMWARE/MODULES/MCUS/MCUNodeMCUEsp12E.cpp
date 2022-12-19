@@ -10,7 +10,7 @@ MCUNodeMCUEsp12E::MCUNodeMCUEsp12E(){
     
 }
 
-void MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[4]){
+string MCUNodeMCUEsp12E::urlKafkaDataProducer(string kafka_parameters[4]){
 
     string current_line="";
     
@@ -46,7 +46,7 @@ void MCUNodeMCUEsp12E::sendKafkaPhysicalData(string kafka_parameters[4]){
 
     url_request.replace(url_request.find("MESSAGE"), sizeof("MESSAGE")-1, this->physical_data_json);
 
-    int http_code = http.POST(url_request);
+    return url_request;
 
 }
 

@@ -48,7 +48,7 @@ public:
 
     //Public methods
     MCUNodeMCUEsp12E();
-    void sendKafkaPhysicalData(string kafka_parameters[4]);
+    string urlKafkaDataProducer(string kafka_parameters[4]);
 
 private:
 
