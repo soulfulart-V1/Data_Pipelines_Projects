@@ -3,9 +3,10 @@
 #include <MCUNodeMCUEsp12E.h>
 #include <ESP8266HTTPClient.h>
 
+#define BAUD_RATE 9600
+
 //Objects
 WiFiClient client;
-MCUNodeMCUEsp12E mcu_instance;
 
 //kafka credentials
 string kafka_parameters_local[4]={
@@ -16,13 +17,13 @@ string kafka_parameters_local[4]={
   };
 
 //wifi credentials
-const char* ssid =  "INSERT_WIFI_SSID";
-const char* pass =  "INSERT_WIFI_PASS";
-const char* server = "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE";
+const char* ssid =  "INTERNET_QUARTO";
+const char* pass =  "arb3x246";
 
 void setup() 
 {
-
+  
+       Serial.begin(BAUD_RATE);
        WiFi.begin(ssid, pass); 
        while (WiFi.status() != WL_CONNECTED) 
           {
@@ -35,18 +36,15 @@ void setup()
 }
  
 void loop(){
-  
-  HTTPClient http;
-  
-  string url_request = mcu_instance.urlKafkaDataProducer(kafka_parameters_local);
 
-    //try to reconnect if connection goes down
-    while (WiFi.status() != WL_CONNECTED) 
-          {
-            delay(500);
-            Serial.print(".");
-          }
-          
-  http.begin(client,server);
+  while (WiFi.status() != WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+    }
+
+MCUNodeMCUEsp12E mcu_instance;
+
+string url_request = mcu_instance.urlKafkaDataProducer(kafka_parameters_local);
+delay(5000);
 
 }

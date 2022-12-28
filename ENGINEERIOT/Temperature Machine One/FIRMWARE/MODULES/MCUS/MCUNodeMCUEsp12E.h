@@ -1,12 +1,13 @@
 #ifndef MCUNODEMCUESP12E_H
 #define MCUNODEMCUESP12E_H
 
-#include <ctime>
 #include <string>
 #include <fstream>
 #include <istream>
 #include <iostream>
 #include "Arduino.h"
+#include "WiFiUdp.h"
+#include <NTPClient.h>
 #include "DHT11Module.h"
 #include <ESP8266HTTPClient.h>
 
@@ -16,7 +17,7 @@ using namespace std;
 #define DHT11PIN 16
 #define DHTTYPE DHT11
 #define SOUNDSENSOR_IN A0
-
+#define GMT_BRL 3 //BRL GMT time
 class MCUNodeMCUEsp12E{
 
 public:
@@ -40,7 +41,6 @@ public:
     string humidity;
     string pressure_air;
     string recorded_time_device;
-    string stream_time;
     string sound_intensity;
     
     //json_message
@@ -52,8 +52,14 @@ public:
 
 private:
 
+    //constants
+    string urlKafkaProducerModel = "{\n\"url\": \"https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE\",\n\"raw_url\": \"https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE\",\n\"method\": \"get\",\n\"auth\": {\"user\": \"USER_NAME\",\n\"password\": \"PASS_VALUE\"\n}\n}";
+    string payloadModel="\"physical_data\": {\n\"device_id\": \"<device_id>\",\n\"device_class\": \"<device_class>\",\n\"heart_pulse\": \"NULL\",\n\"speed\": \"NULL\",\n\"calories\": \"NULL\",\n\"pressure_body\": \"NULL\",\n\"temp\": \"<temp>\",\n\"humidity\": \"<humidity>\",\n\"pressure_air\": \"NULL\",\n\"recorded_time_device\": \"<recorded_time_device>\",\n\"sound_intensity\": \"<sound_intensity>\"\n}";
+
+
     void updatePhysicalData();
     void updatePhysicalDataJson();
+    string getCurrentDateTime();
 
 };
 
