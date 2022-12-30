@@ -52,21 +52,32 @@ void MCUNodeMCUEsp12E::updatePhysicalDataJson(){
 
 void MCUNodeMCUEsp12E::updatePhysicalData(){
     //modules
-    //DHT11Module dht_local(DHT11PIN, DHTTYPE);
+    dht11 DHT11_local;
 
-    this->humidity = "75";
-    this->temp = "28.5";
+    int dht11_read = DHT11_local.read(DHT11PIN);
+
+    this->humidity = to_string(DHT11_local.temperature);
+    this->temp = to_string(DHT11_local.humidity);
 
     //read sound intensity data
-    this->sound_intensity = analogRead(SOUNDSENSOR_IN);
+    this->sound_intensity = to_string(analogRead(SOUNDSENSOR_IN));
 
 }
 
 string MCUNodeMCUEsp12E::getCurrentDateTime(){
 
-    int i;
+    int i, retry_time=0;
     WiFiUDP ntpUDP;
     NTPClient timeClient(ntpUDP, "pool.ntp.org");
+
+    while (!timeClient.isTimeSet() && retry_time<3){
+        timeClient.begin();
+        timeClient.update();
+        retry_time++;
+        delay(DELAY_WAIT_GET_TIME);
+    }
+
+    retry_time = 0;
 
     timeClient.begin();
     timeClient.update();

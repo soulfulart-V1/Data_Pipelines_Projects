@@ -2,22 +2,22 @@
 #define MCUNODEMCUESP12E_H
 
 #include <string>
+#include <dht11.h>
 #include <fstream>
 #include <istream>
 #include <iostream>
 #include "Arduino.h"
 #include "WiFiUdp.h"
 #include <NTPClient.h>
-#include "DHT11Module.h"
 #include <ESP8266HTTPClient.h>
 
 using namespace std;
 
 //Hardware defined variables check schematics
 #define DHT11PIN 16
-#define DHTTYPE DHT11
 #define SOUNDSENSOR_IN A0
 #define GMT_BRL 3 //BRL GMT time
+#define DELAY_WAIT_GET_TIME 100
 class MCUNodeMCUEsp12E{
 
 public:

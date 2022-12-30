@@ -1,9 +1,0 @@
-{
-    "url": "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE",
-    "raw_url": "https://BOOTSRAP_SERVER/produce/KAFKA_TOPIC/MESSAGE",
-    "method": "get",
-    "auth": {
-        "user": "USER_NAME",
-        "password": "PASS_VALUE"
-    }
-}
