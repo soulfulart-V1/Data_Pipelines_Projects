@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <MCUNodeMCUEsp12E.h>
 #include <ESP8266HTTPClient.h>
+#include <WiFiClientSecureBearSSL.h>
 
 #define BAUD_RATE 9600
 
@@ -17,8 +18,8 @@ string kafka_parameters_local[4]={
   };
 
 //wifi credentials
-const char* ssid =  "INTERNET_QUARTO";
-const char* pass =  "arb3x246";
+const char* ssid =  "SSID";
+const char* pass =  "PASS";
 
 void setup() 
 {
@@ -32,19 +33,29 @@ void setup()
           }
 
       Serial.println("");
-      Serial.println("WiFi connected"); 
+      Serial.println("WiFi connected");      
+
 }
  
 void loop(){
 
-  while (WiFi.status() != WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
-    }
+    while (WiFi.status() != WL_CONNECTED) 
+      {
+        delay(500);
+        Serial.print(".");
+      }
 
-MCUNodeMCUEsp12E mcu_instance;
+    std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
+    client->setInsecure();
 
-string url_request = mcu_instance.urlKafkaDataProducer(kafka_parameters_local);
-delay(5000);
+    HTTPClient http;
+    String serverPath = "https://INSERT_BOOTSTRAPSERVER_DURING_COMPILE_PHASE/produce/INSERT_KAFKA_TOPIC_DURING_COMPILE_PHASE/MESSAGE_IOT";
+    http.begin(*client, serverPath);
+    http.setAuthorization("USER","PASS");
+    int httpResponseCode = http.GET();
+    Serial.println(http.errorToString(httpResponseCode));
+    MCUNodeMCUEsp12E mcu_instance;
+
+    delay(5000);
 
 }
