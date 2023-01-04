@@ -2,7 +2,6 @@
 #include <ESP8266WiFi.h>
 #include <MCUNodeMCUEsp12E.h>
 #include <ESP8266HTTPClient.h>
-#include <WiFiClientSecureBearSSL.h>
 
 #define BAUD_RATE 9600
 
@@ -39,23 +38,15 @@ void setup()
  
 void loop(){
 
-    while (WiFi.status() != WL_CONNECTED) 
-      {
+    while (WiFi.status() != WL_CONNECTED){
         delay(500);
         Serial.print(".");
-      }
+        }    
 
-    std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
-    client->setInsecure();
-
-    HTTPClient http;
-    String serverPath = "https://INSERT_BOOTSTRAPSERVER_DURING_COMPILE_PHASE/produce/INSERT_KAFKA_TOPIC_DURING_COMPILE_PHASE/MESSAGE_IOT";
-    http.begin(*client, serverPath);
-    http.setAuthorization("USER","PASS");
-    int httpResponseCode = http.GET();
-    Serial.println(http.errorToString(httpResponseCode));
     MCUNodeMCUEsp12E mcu_instance;
 
+    string url_request = mcu_instance.urlKafkaDataProducer(kafka_parameters_local);
+  
     delay(5000);
 
 }

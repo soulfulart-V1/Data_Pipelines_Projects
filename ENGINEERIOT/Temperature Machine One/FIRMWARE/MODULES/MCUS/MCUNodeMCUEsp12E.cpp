@@ -5,6 +5,7 @@
 MCUNodeMCUEsp12E::MCUNodeMCUEsp12E(){
 
     this->device_class = "sensors";
+    this->device_id = to_string(ESP.getChipId());
     this->recorded_time_device = this->getCurrentDateTime();
     this->updatePhysicalData();
     this->updatePhysicalDataJson();
@@ -25,9 +26,16 @@ string MCUNodeMCUEsp12E::urlKafkaDataProducer(string kafka_parameters[4]){
 
     url_request.replace(url_request.find("BOOTSRAP_SERVER"), sizeof("BOOTSRAP_SERVER")-1, this->kafka_parameters.boostrap_server);
     url_request.replace(url_request.find("KAFKA_TOPIC"), sizeof("KAFKA_TOPIC")-1, this->kafka_parameters.topic);
-    url_request.replace(url_request.find("USER_NAME"), sizeof("USER_NAME")-1, this->kafka_parameters.user_name);
-    url_request.replace(url_request.find("PASS_VALUE"), sizeof("PASS_VALUE")-1, this->kafka_parameters.pass_value);
     url_request.replace(url_request.find("MESSAGE"), sizeof("MESSAGE")-1, this->physical_data_json);
+
+    std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
+    client->setInsecure();
+    
+    HTTPClient http;
+    http.begin(*client, url_request.c_str());
+    http.setAuthorization(this->kafka_parameters.user_name.c_str(), this->kafka_parameters.pass_value.c_str());
+    int httpResponseCode = http.GET();
+    Serial.println(http.errorToString(httpResponseCode));
 
     return url_request;
 
@@ -96,13 +104,15 @@ string MCUNodeMCUEsp12E::getCurrentDateTime(){
     String hour_now_string = "00";
     String minute_now_string = "00";
     String second_now_string = "00";
-
+    String current_month_string = "00";
+    String month_day_string = "00";
 
     hour_now = hour_now - GMT_BRL;
     if (hour_now<0){
         hour_now = hour_now + 24;
     }
 
+    //add 0 when value less than 9
     hour_now_string = String(hour_now);
 
     if (hour_now<10){
@@ -119,7 +129,17 @@ string MCUNodeMCUEsp12E::getCurrentDateTime(){
         second_now_string = "0"+ String(second_now);
     }
 
-    String current_date_String = String(current_year)+"-"+String(current_month)+"-"+String(month_day);
+    current_month_string = String(current_month);
+    if (current_month<10){
+        current_month_string = "0"+ String(current_month);
+    }
+
+    month_day_string = String(month_day);
+    if (month_day<10){
+        month_day_string = "0"+ String(month_day);
+    }
+
+    String current_date_String = String(current_year) + "-" + current_month_string + "-" + month_day_string;
     current_date_String = current_date_String + "T" + hour_now_string;
     current_date_String = current_date_String + ":" + minute_now_string;
     current_date_String = current_date_String + ":" + second_now_string;
